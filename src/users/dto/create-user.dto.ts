@@ -31,5 +31,5 @@ export class CreateUserDto {
   @IsOptional()
   @IsString()
   @IsEnum(userRoles)
-  role: string;
+  role: userRoles;
 }
