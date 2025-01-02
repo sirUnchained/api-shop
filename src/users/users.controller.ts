@@ -18,12 +18,6 @@ import { Response } from 'express';
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
-  @Post()
-  async create(@Body() createUserDto: CreateUserDto, @Res() res: Response) {
-    const result = await this.usersService.create(createUserDto);
-    return res.status(201).json(result);
-  }
-
   @Get()
   async findAll(
     @Query() query: { limit: string; page: string },

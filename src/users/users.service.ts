@@ -19,30 +19,6 @@ export class UsersService {
     private readonly userRepo: Repository<UserEntity>,
   ) {}
 
-  async create(createUserDto: CreateUserDto) {
-    try {
-      let password: string | null = null;
-      let role: userRoles = userRoles.user;
-      if (createUserDto.password) {
-        password = await bcrypt.hash(createUserDto.password, 10);
-      }
-      if (!(await this.userRepo.count())) {
-        role = userRoles.admin;
-      }
-
-      const user = this.userRepo.create({
-        ...createUserDto,
-        password,
-        role,
-      });
-      await this.userRepo.save(user);
-      return user;
-    } catch (error) {
-      console.log(error);
-      throw new InternalServerErrorException(error.message);
-    }
-  }
-
   async findAll(limit: number, page: number) {
     try {
       limit = limit || 10;
