@@ -8,14 +8,16 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { UserEntity } from 'src/users/entities/user.entity';
 import { Repository } from 'typeorm';
 import { RegisterDto } from './dto/register.dto';
-import * as bcrypt from 'bcrypt';
+import * as bcrypt from 'bcryptjs';
 import userRoles from './enums/user.enums';
+import { JwtService } from '@nestjs/jwt';
 
 @Injectable()
 export class AuthService {
   constructor(
     @InjectRepository(UserEntity)
     private readonly userRepo: Repository<UserEntity>,
+    private readonly JwtService: JwtService,
   ) {}
 
   async login(loginDto: LoginDto) {
@@ -27,19 +29,29 @@ export class AuthService {
         return new BadRequestException('user not found.');
       }
 
-      const checkPass = await bcrypt.compare(loginDto.password, user.password);
+      const checkPass = bcrypt.compareSync(loginDto.password, user.password);
       if (!checkPass) {
         return new BadRequestException('invalid data.');
       }
 
-      return user;
+      const payload = { id: user.id };
+      const token = this.JwtService.sign(payload);
+      return token;
     } catch (error) {
+      console.log(error);
       throw new InternalServerErrorException(error.message);
     }
   }
 
   async register(createUserDto: RegisterDto) {
     try {
+      const checkUser = await this.userRepo.findOne({
+        where: { username: createUserDto.username, phone: createUserDto.phone },
+      });
+      if (checkUser) {
+        return new BadRequestException('user already exist.');
+      }
+
       let password: string | null = null;
       let role: userRoles = userRoles.user;
       if (createUserDto.password) {
@@ -55,9 +67,10 @@ export class AuthService {
         role,
       });
       await this.userRepo.save(user);
-      return user;
+
+      const token = this.JwtService.sign({ id: user.id });
+      return token;
     } catch (error) {
-      console.log(error);
       throw new InternalServerErrorException(error.message);
     }
   }
