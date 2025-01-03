@@ -20,7 +20,7 @@ PassportModule;
       imports: [ConfigModule],
       inject: [ConfigService],
       useFactory: async (configService: ConfigService): Promise<any> => ({
-        secret: configService.get('JWT_SECRET'),
+        secret: 'SHHH_SECRET',
         signOption: { expiresIn: '1d' },
       }),
     }),
