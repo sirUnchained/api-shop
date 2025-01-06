@@ -4,6 +4,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { UserEntity } from './users/entities/user.entity';
 import { AuthModule } from './auth/auth.module';
 import { AddressModule } from './address/address.module';
+import { AddressEntity } from './address/entities/address.entity';
 
 @Module({
   imports: [
@@ -15,7 +16,7 @@ import { AddressModule } from './address/address.module';
       username: 'root',
       password: '',
       database: 'api-shop',
-      entities: [UserEntity],
+      entities: [UserEntity, AddressEntity],
       synchronize: true,
     }),
     AuthModule,

@@ -1,7 +1,14 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { UserEntity } from 'src/users/entities/user.entity';
+import {
+  Column,
+  Entity,
+  OneToMany,
+  OneToOne,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 
 @Entity('address')
-export class Address {
+export class AddressEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
@@ -11,5 +18,6 @@ export class Address {
   @Column({ type: 'varchar', length: 255 })
   address: string;
 
-  user_id: number;
+  @OneToOne(() => UserEntity, (user) => user.id, { onDelete: 'CASCADE' })
+  user_id: UserEntity;
 }
