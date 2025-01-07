@@ -30,12 +30,17 @@ export class AppModule {
   configure(consumer: MiddlewareConsumer) {
     consumer
       .apply(authorizationMiddleware)
-      .forRoutes({ path: 'address/*', method: RequestMethod.ALL });
+      .forRoutes(
+        { path: 'address/*', method: RequestMethod.ALL },
+        { path: 'users/*', method: RequestMethod.ALL },
+      );
     consumer
       .apply(AdminRole)
       .forRoutes(
         { path: 'address/:id', method: RequestMethod.DELETE },
         { path: 'address/:id', method: RequestMethod.PATCH },
+        { path: 'users/*', method: RequestMethod.GET },
+        { path: 'users/*', method: RequestMethod.DELETE },
       );
   }
 }
