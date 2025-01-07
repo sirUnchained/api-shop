@@ -6,7 +6,7 @@ import {
 } from '@nestjs/common';
 import { Request } from 'express';
 
-import jwt from 'jsonwebtoken';
+import * as jwt from 'jsonwebtoken';
 import { UserEntity } from 'src/users/entities/user.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
@@ -21,7 +21,6 @@ export class AuthorazationMiddleware implements NestMiddleware {
   use(req: Request, res: any, next: () => void) {
     try {
       const bearerToken = req.headers.authorization?.split(' ')[1];
-      console.log(bearerToken);
       if (!bearerToken) {
         throw new BadRequestException('unauthorized.');
       }

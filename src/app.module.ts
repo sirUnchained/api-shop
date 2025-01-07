@@ -1,10 +1,11 @@
-import { Module } from '@nestjs/common';
+import { MiddlewareConsumer, Module } from '@nestjs/common';
 import { UsersModule } from './users/users.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { UserEntity } from './users/entities/user.entity';
 import { AuthModule } from './auth/auth.module';
 import { AddressModule } from './address/address.module';
 import { AddressEntity } from './address/entities/address.entity';
+import { AuthorazationMiddleware } from './middleWares/authorazation.middleware';
 
 @Module({
   imports: [
@@ -21,6 +22,11 @@ import { AddressEntity } from './address/entities/address.entity';
     AuthModule,
     AddressModule,
     UsersModule,
+    TypeOrmModule.forFeature([AddressEntity, UserEntity]),
   ],
 })
-export class AppModule {}
+export class AppModule {
+  configure(consumer: MiddlewareConsumer) {
+    consumer.apply(AuthorazationMiddleware).forRoutes('address');
+  }
+}

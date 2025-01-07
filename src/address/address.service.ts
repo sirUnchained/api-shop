@@ -68,7 +68,7 @@ export class AddressService {
     }
   }
 
-  async findOne(id: number) {
+  async findOne(currendUser: any, id: number) {
     try {
       if (isNaN(id)) {
         throw new BadRequestException('address not found.');
@@ -80,6 +80,11 @@ export class AddressService {
       });
       if (!address) {
         throw new BadRequestException('address not found.');
+      }
+      if (currendUser.id !== id) {
+        throw new BadRequestException(
+          'you are not allowed to access other users address.',
+        );
       }
 
       delete address.user_id.password;
