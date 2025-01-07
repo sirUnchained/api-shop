@@ -1,11 +1,12 @@
-import { MiddlewareConsumer, Module } from '@nestjs/common';
+import { MiddlewareConsumer, Module, RequestMethod } from '@nestjs/common';
 import { UsersModule } from './users/users.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { UserEntity } from './users/entities/user.entity';
 import { AuthModule } from './auth/auth.module';
 import { AddressModule } from './address/address.module';
 import { AddressEntity } from './address/entities/address.entity';
-import { AuthorazationMiddleware } from './middleWares/authorazation.middleware';
+import { authorizationMiddleware } from './middleWares/authorization .middleware';
+import { AdminRole } from './middleWares/adminRole.middleware';
 
 @Module({
   imports: [
@@ -27,6 +28,14 @@ import { AuthorazationMiddleware } from './middleWares/authorazation.middleware'
 })
 export class AppModule {
   configure(consumer: MiddlewareConsumer) {
-    consumer.apply(AuthorazationMiddleware).forRoutes('address');
+    consumer
+      .apply(authorizationMiddleware)
+      .forRoutes({ path: 'address/*', method: RequestMethod.ALL });
+    consumer
+      .apply(AdminRole)
+      .forRoutes(
+        { path: 'address/:id', method: RequestMethod.DELETE },
+        { path: 'address/:id', method: RequestMethod.PATCH },
+      );
   }
 }
