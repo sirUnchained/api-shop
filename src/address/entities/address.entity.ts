@@ -2,6 +2,7 @@ import { UserEntity } from 'src/users/entities/user.entity';
 import {
   Column,
   Entity,
+  JoinColumn,
   OneToMany,
   OneToOne,
   PrimaryGeneratedColumn,
@@ -19,5 +20,6 @@ export class AddressEntity {
   address: string;
 
   @OneToOne(() => UserEntity, (user) => user.id, { onDelete: 'CASCADE' })
+  @JoinColumn()
   user_id: UserEntity;
 }

@@ -8,7 +8,6 @@ import { AddressEntity } from './address/entities/address.entity';
 
 @Module({
   imports: [
-    UsersModule,
     TypeOrmModule.forRoot({
       type: 'mysql',
       host: 'localhost',
@@ -21,6 +20,7 @@ import { AddressEntity } from './address/entities/address.entity';
     }),
     AuthModule,
     AddressModule,
+    UsersModule,
   ],
 })
 export class AppModule {}

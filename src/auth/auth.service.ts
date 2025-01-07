@@ -68,7 +68,10 @@ export class AuthService {
       });
       await this.userRepo.save(user);
 
-      const token = this.JwtService.sign({ id: user.id });
+      const token = this.JwtService.sign(
+        { id: user.id },
+        { secret: 'secret_key' },
+      );
       return token;
     } catch (error) {
       throw new InternalServerErrorException(error.message);
