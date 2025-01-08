@@ -41,6 +41,9 @@ export class WalletService {
       await this.walletRepo.save(newWallet);
       return 'done.';
     } catch (error) {
+      if (error instanceof BadRequestException) {
+        throw error;
+      }
       throw new InternalServerErrorException('error ?');
     }
   }
@@ -53,19 +56,94 @@ export class WalletService {
       }
       return wallets;
     } catch (error) {
+      if (error instanceof BadRequestException) {
+        throw error;
+      }
       throw new InternalServerErrorException('error ?');
     }
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} wallet`;
+  async findOne(id: number) {
+    try {
+      if (isNaN(id)) {
+        throw new BadRequestException('user not found');
+      }
+      const user = await this.userRepo.findOne({ where: { id } });
+      if (!user) {
+        throw new BadRequestException('user not found');
+      }
+
+      const wallet = await this.walletRepo.findOne({
+        relations: ['users'],
+        where: { user_id: user },
+      });
+      if (!wallet) {
+        throw new BadRequestException('wallet not found');
+      }
+      delete wallet.user_id.password;
+
+      return wallet;
+    } catch (error) {
+      if (error instanceof BadRequestException) {
+        throw error;
+      }
+      throw new InternalServerErrorException('error ?');
+    }
   }
 
-  update(id: number, updateWalletDto: UpdateWalletDto) {
-    return `This action updates a #${id} wallet`;
+  async update(id: number, updateWalletDto: UpdateWalletDto, req: any) {
+    try {
+      if (isNaN(id)) {
+        throw new BadRequestException('user not found');
+      }
+
+      const wallet = await this.walletRepo.findOne({
+        where: { id },
+        relations: ['users'],
+      });
+      if (wallet) {
+        throw new BadRequestException('wallet not found');
+      }
+      if (req.user.role !== 'admin' || req.user.id !== wallet.user_id.id) {
+        return new BadRequestException(
+          'you are not allowed to change this wallet.',
+        );
+      }
+
+      const result = await this.walletRepo.update(
+        { id },
+        { amount: updateWalletDto.amount },
+      );
+      if (!result.affected) {
+        throw new BadRequestException('wallet not found.');
+      }
+
+      return 'done';
+    } catch (error) {
+      if (error instanceof BadRequestException) {
+        throw error;
+      }
+      throw new InternalServerErrorException('update error');
+    }
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} wallet`;
+  async remove(id: number) {
+    try {
+      if (isNaN(id)) {
+        throw new BadRequestException('user not found');
+      }
+
+      const result = await this.walletRepo.delete(id);
+      if (!result.affected) {
+        throw new BadRequestException('wallet not found.');
+      }
+
+      return 'done';
+    } catch (error) {
+      if (error instanceof BadRequestException) {
+        throw error;
+      }
+      throw new InternalServerErrorException('update error');
+    }
   }
 }

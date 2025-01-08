@@ -36,6 +36,7 @@ export class AppModule {
       .forRoutes(
         { path: 'address/*', method: RequestMethod.ALL },
         { path: 'users/*', method: RequestMethod.ALL },
+        { path: 'wallet/*', method: RequestMethod.ALL },
       );
     consumer
       .apply(AdminRole)
@@ -44,6 +45,7 @@ export class AppModule {
         { path: 'address/:id', method: RequestMethod.PATCH },
         { path: 'users/*', method: RequestMethod.GET },
         { path: 'users/*', method: RequestMethod.DELETE },
+        { path: 'wallet/:id', method: RequestMethod.DELETE },
       );
   }
 }
