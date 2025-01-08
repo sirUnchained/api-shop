@@ -26,7 +26,7 @@ import { WalletEntity } from './wallet/entities/wallet.entity';
     AddressModule,
     UsersModule,
     WalletModule,
-    TypeOrmModule.forFeature([AddressEntity, UserEntity]),
+    TypeOrmModule.forFeature([AddressEntity, UserEntity, WalletEntity]),
   ],
 })
 export class AppModule {
