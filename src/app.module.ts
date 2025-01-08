@@ -8,6 +8,7 @@ import { AddressEntity } from './address/entities/address.entity';
 import { authorizationMiddleware } from './middleWares/authorization .middleware';
 import { AdminRole } from './middleWares/adminRole.middleware';
 import { WalletModule } from './wallet/wallet.module';
+import { WalletEntity } from './wallet/entities/wallet.entity';
 
 @Module({
   imports: [
@@ -18,14 +19,14 @@ import { WalletModule } from './wallet/wallet.module';
       username: 'root',
       password: '',
       database: 'api-shop',
-      entities: [UserEntity, AddressEntity],
+      entities: [UserEntity, AddressEntity, WalletEntity],
       synchronize: true,
     }),
     AuthModule,
     AddressModule,
     UsersModule,
-    TypeOrmModule.forFeature([AddressEntity, UserEntity]),
     WalletModule,
+    TypeOrmModule.forFeature([AddressEntity, UserEntity]),
   ],
 })
 export class AppModule {
