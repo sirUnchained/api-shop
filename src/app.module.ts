@@ -7,6 +7,7 @@ import { AddressModule } from './address/address.module';
 import { AddressEntity } from './address/entities/address.entity';
 import { authorizationMiddleware } from './middleWares/authorization .middleware';
 import { AdminRole } from './middleWares/adminRole.middleware';
+import { WalletModule } from './wallet/wallet.module';
 
 @Module({
   imports: [
@@ -24,6 +25,7 @@ import { AdminRole } from './middleWares/adminRole.middleware';
     AddressModule,
     UsersModule,
     TypeOrmModule.forFeature([AddressEntity, UserEntity]),
+    WalletModule,
   ],
 })
 export class AppModule {
