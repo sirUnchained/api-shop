@@ -35,7 +35,7 @@ export class AuthService {
       }
 
       const payload = { id: user.id };
-      const token = this.JwtService.sign(payload);
+      const token = this.JwtService.sign(payload, { secret: 'secret_key' });
       return token;
     } catch (error) {
       console.log(error);

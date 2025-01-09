@@ -19,9 +19,12 @@ export class TicketService {
     private readonly userRepo: Repository<UserEntity>,
   ) {}
 
-  async create(createTicketDto: CreateTicketDto) {
+  async create(createTicketDto: CreateTicketDto, req: any) {
     try {
-      const newTicket = this.ticketRepo.create(createTicketDto);
+      const newTicket = this.ticketRepo.create({
+        ...createTicketDto,
+        user_id: req.user.id,
+      });
       await this.ticketRepo.save(newTicket);
       return newTicket;
     } catch (error) {

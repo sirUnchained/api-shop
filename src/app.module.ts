@@ -45,7 +45,7 @@ export class AppModule {
         { path: 'address/*', method: RequestMethod.ALL },
         { path: 'users/*', method: RequestMethod.ALL },
         { path: 'wallet/*', method: RequestMethod.ALL },
-        { path: 'ticket/*', method: RequestMethod.ALL },
+        { path: 'ticket*', method: RequestMethod.ALL },
       );
     consumer
       .apply(AdminRole)
