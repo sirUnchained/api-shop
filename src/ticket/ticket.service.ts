@@ -1,30 +1,71 @@
-import { Injectable, InternalServerErrorException } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  InternalServerErrorException,
+} from '@nestjs/common';
 import { CreateTicketDto } from './dto/create-ticket.dto';
 import { UpdateTicketDto } from './dto/update-ticket.dto';
+import { InjectRepository } from '@nestjs/typeorm';
+import { TicketEntity } from './entities/ticket.entity';
+import { UserEntity } from 'src/users/entities/user.entity';
+import { Repository } from 'typeorm';
 
 @Injectable()
 export class TicketService {
-  create(createTicketDto: CreateTicketDto) {
+  constructor(
+    @InjectRepository(TicketEntity)
+    private readonly ticketRepo: Repository<TicketEntity>,
+    @InjectRepository(UserEntity)
+    private readonly userRepo: Repository<UserEntity>,
+  ) {}
+
+  async create(createTicketDto: CreateTicketDto) {
     try {
-      return 'This action adds a new ticket';
+      const newTicket = this.ticketRepo.create(createTicketDto);
+      await this.ticketRepo.save(newTicket);
+      return newTicket;
     } catch (error) {
       throw new InternalServerErrorException('insternal error');
     }
   }
 
-  findAll() {
-    return `This action returns all ticket`;
+  async findAll() {
+    try {
+      const tickets = this.ticketRepo.find();
+      return tickets;
+    } catch (error) {
+      throw new InternalServerErrorException('insternal error');
+    }
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} ticket`;
+  async findOne(id: number, req: any) {
+    try {
+      if (!id) {
+        throw new BadRequestException('ticket not found.');
+      }
+
+      const ticket = await this.ticketRepo.findOne({
+        where: { id },
+        relations: ['users'],
+      });
+      if (ticket.user_id.id !== req.user.id || req.user.role !== 'admin') {
+        throw new BadRequestException('you cannot access this ticket.');
+      }
+
+      return ticket;
+    } catch (error) {
+      if (error instanceof BadRequestException) {
+        throw error;
+      }
+      throw new InternalServerErrorException('insternal error');
+    }
   }
 
-  update(id: number, updateTicketDto: UpdateTicketDto) {
+  async update(id: number, updateTicketDto: UpdateTicketDto) {
     return `This action updates a #${id} ticket`;
   }
 
-  remove(id: number) {
+  async remove(id: number) {
     return `This action removes a #${id} ticket`;
   }
 }
