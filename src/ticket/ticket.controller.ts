@@ -32,8 +32,12 @@ export class TicketController {
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateTicketDto: UpdateTicketDto) {
-    return this.ticketService.update(+id, updateTicketDto);
+  update(
+    @Param('id') id: string,
+    @Body() updateTicketDto: UpdateTicketDto,
+    @Req() req: any,
+  ) {
+    return this.ticketService.update(+id, updateTicketDto, req);
   }
 
   @Delete(':id')

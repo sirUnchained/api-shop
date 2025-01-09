@@ -61,11 +61,36 @@ export class TicketService {
     }
   }
 
-  async update(id: number, updateTicketDto: UpdateTicketDto) {
-    return `This action updates a #${id} ticket`;
+  async update(id: number, updateTicketDto: UpdateTicketDto, req: any) {
+    try {
+      const result = await this.ticketRepo.update(
+        { id },
+        { reply_msg: updateTicketDto.reply_msg, reply_id: req.user.id },
+      );
+      if (!result.affected) {
+        throw new BadRequestException('ticket not found');
+      }
+      return 'done';
+    } catch (error) {
+      if (error instanceof BadRequestException) {
+        throw error;
+      }
+      throw new InternalServerErrorException('insternal error');
+    }
   }
 
   async remove(id: number) {
-    return `This action removes a #${id} ticket`;
+    try {
+      const result = await this.ticketRepo.delete(id);
+      if (!result.affected) {
+        throw new BadRequestException('ticket not found');
+      }
+      return 'done';
+    } catch (error) {
+      if (error instanceof BadRequestException) {
+        throw error;
+      }
+      throw new InternalServerErrorException('insternal error');
+    }
   }
 }
