@@ -9,6 +9,8 @@ import { authorizationMiddleware } from './middleWares/authorization .middleware
 import { AdminRole } from './middleWares/adminRole.middleware';
 import { WalletModule } from './wallet/wallet.module';
 import { WalletEntity } from './wallet/entities/wallet.entity';
+import { TicketModule } from './ticket/ticket.module';
+import { TicketEntity } from './ticket/entities/ticket.entity';
 
 @Module({
   imports: [
@@ -19,14 +21,20 @@ import { WalletEntity } from './wallet/entities/wallet.entity';
       username: 'root',
       password: '',
       database: 'api-shop',
-      entities: [UserEntity, AddressEntity, WalletEntity],
+      entities: [UserEntity, AddressEntity, WalletEntity, TicketEntity],
       synchronize: true,
     }),
     AuthModule,
     AddressModule,
     UsersModule,
     WalletModule,
-    TypeOrmModule.forFeature([AddressEntity, UserEntity, WalletEntity]),
+    TicketModule,
+    TypeOrmModule.forFeature([
+      AddressEntity,
+      UserEntity,
+      WalletEntity,
+      TicketEntity,
+    ]),
   ],
 })
 export class AppModule {
@@ -37,6 +45,7 @@ export class AppModule {
         { path: 'address/*', method: RequestMethod.ALL },
         { path: 'users/*', method: RequestMethod.ALL },
         { path: 'wallet/*', method: RequestMethod.ALL },
+        { path: 'ticket/*', method: RequestMethod.ALL },
       );
     consumer
       .apply(AdminRole)
@@ -46,6 +55,10 @@ export class AppModule {
         { path: 'users/*', method: RequestMethod.GET },
         { path: 'users/*', method: RequestMethod.DELETE },
         { path: 'wallet/:id', method: RequestMethod.DELETE },
+        { path: 'ticket/*', method: RequestMethod.PATCH },
+        { path: 'ticket/*', method: RequestMethod.DELETE },
+        { path: 'ticket/*', method: RequestMethod.DELETE },
+        { path: 'ticket', method: RequestMethod.GET },
       );
   }
 }
