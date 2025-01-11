@@ -12,6 +12,7 @@ import { WalletEntity } from './wallet/entities/wallet.entity';
 import { TicketModule } from './ticket/ticket.module';
 import { TicketEntity } from './ticket/entities/ticket.entity';
 import { ProductModule } from './product/product.module';
+import { ProductEntity } from './product/entities/product.entity';
 
 @Module({
   imports: [
@@ -29,14 +30,15 @@ import { ProductModule } from './product/product.module';
     AddressModule,
     UsersModule,
     WalletModule,
+    ProductModule,
     TicketModule,
     TypeOrmModule.forFeature([
       AddressEntity,
       UserEntity,
       WalletEntity,
       TicketEntity,
+      ProductEntity,
     ]),
-    ProductModule,
   ],
 })
 export class AppModule {
@@ -48,6 +50,9 @@ export class AppModule {
         { path: 'users/*', method: RequestMethod.ALL },
         { path: 'wallet/*', method: RequestMethod.ALL },
         { path: 'ticket*', method: RequestMethod.ALL },
+        { path: 'product', method: RequestMethod.POST },
+        { path: 'product', method: RequestMethod.PATCH },
+        { path: 'product', method: RequestMethod.DELETE },
       );
     consumer
       .apply(AdminRole)
@@ -61,6 +66,9 @@ export class AppModule {
         { path: 'ticket/*', method: RequestMethod.DELETE },
         { path: 'ticket/*', method: RequestMethod.DELETE },
         { path: 'ticket', method: RequestMethod.GET },
+        { path: 'product', method: RequestMethod.POST },
+        { path: 'product', method: RequestMethod.PATCH },
+        { path: 'product', method: RequestMethod.DELETE },
       );
   }
 }
