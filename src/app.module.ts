@@ -11,6 +11,7 @@ import { WalletModule } from './wallet/wallet.module';
 import { WalletEntity } from './wallet/entities/wallet.entity';
 import { TicketModule } from './ticket/ticket.module';
 import { TicketEntity } from './ticket/entities/ticket.entity';
+import { ProductModule } from './product/product.module';
 
 @Module({
   imports: [
@@ -35,6 +36,7 @@ import { TicketEntity } from './ticket/entities/ticket.entity';
       WalletEntity,
       TicketEntity,
     ]),
+    ProductModule,
   ],
 })
 export class AppModule {
