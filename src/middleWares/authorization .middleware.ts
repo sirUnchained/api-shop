@@ -18,7 +18,7 @@ export class authorizationMiddleware implements NestMiddleware {
     private readonly userRepository: Repository<UserEntity>,
   ) {}
 
-  use(req: Request, res: any, next: () => void) {
+  async use(req: Request, res: any, next: () => void) {
     try {
       const bearerToken = req.headers.authorization?.split(' ')[1];
       if (!bearerToken) {
@@ -26,12 +26,15 @@ export class authorizationMiddleware implements NestMiddleware {
       }
 
       const payload = jwt.verify(bearerToken, 'secret_key') as any;
-      const user = this.userRepository.findOne({ where: { id: +payload.id } });
+      const user = await this.userRepository.findOne({
+        where: { id: +payload.id },
+      });
       if (!user) {
         throw new BadRequestException('unauthorized.');
       }
       req.user = user;
       next();
+      return;
     } catch (error) {
       if (error instanceof BadRequestException) {
         throw error;

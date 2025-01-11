@@ -12,6 +12,7 @@ export class AdminRole implements NestMiddleware {
     try {
       if (req.user.role == 'admin') {
         next();
+        return;
       }
       throw new ForbiddenException('this route is protected.');
     } catch (error) {

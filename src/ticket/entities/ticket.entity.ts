@@ -23,11 +23,11 @@ export class TicketEntity {
   description: string;
 
   @ManyToOne(() => UserEntity, (user) => user.id, { onDelete: 'CASCADE' })
-  user_id: UserEntity;
+  user: UserEntity;
 
   @OneToOne(() => UserEntity, (user) => user.id, { onDelete: 'CASCADE' })
   @JoinColumn()
-  reply_id: UserEntity | null;
+  reply: UserEntity | null;
 
   @Column({ default: null, nullable: true })
   reply_msg: string | null;
