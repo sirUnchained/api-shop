@@ -1,4 +1,4 @@
-import { IsNotEmpty, Length, Min } from 'class-validator';
+import { IsNotEmpty, Length, MaxLength, Min } from 'class-validator';
 
 export class CreateProductDto {
   @IsNotEmpty()
@@ -9,9 +9,11 @@ export class CreateProductDto {
   slug: string;
 
   @IsNotEmpty()
+  @MaxLength(250)
   price: string;
 
   @IsNotEmpty()
+  @MaxLength(250)
   description: string;
 
   @IsNotEmpty()

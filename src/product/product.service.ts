@@ -67,9 +67,26 @@ export class ProductService {
     }
   }
 
-  update(id: number, updateProductDto: UpdateProductDto) {
+  async update(id: number, updateProductDto: UpdateProductDto) {
     try {
-      return 'This action adds a new product';
+      if (!id) {
+        throw new BadRequestException('priduct not found !');
+      }
+
+      const product = await this.productRepo.findOne({ where: { id } });
+      if (!product) {
+        throw new BadRequestException('priduct not found !');
+      }
+
+      for (const option in updateProductDto) {
+        product[option] = updateProductDto[option];
+      }
+
+      const result = await this.productRepo.update({ id: id }, product);
+      if (!result.affected) {
+        throw new BadRequestException('priduct not found !');
+      }
+      return product;
     } catch (error) {
       if (error instanceof BadRequestException) {
         throw error;
@@ -78,9 +95,18 @@ export class ProductService {
     }
   }
 
-  remove(id: number) {
+  async remove(id: number) {
     try {
-      return 'This action adds a new product';
+      if (!id) {
+        throw new BadRequestException('priduct not found !');
+      }
+
+      const removed = await this.productRepo.delete(id);
+      if (!removed.affected) {
+        throw new BadRequestException('priduct not found !');
+      }
+
+      return 'done';
     } catch (error) {
       if (error instanceof BadRequestException) {
         throw error;
