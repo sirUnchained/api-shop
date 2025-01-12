@@ -14,6 +14,7 @@ import { TicketEntity } from './ticket/entities/ticket.entity';
 import { ProductModule } from './product/product.module';
 import { ProductEntity } from './product/entities/product.entity';
 import { CategoryModule } from './category/category.module';
+import { CategoryEntity } from './category/entities/category.entity';
 
 @Module({
   imports: [
@@ -32,15 +33,16 @@ import { CategoryModule } from './category/category.module';
     UsersModule,
     WalletModule,
     ProductModule,
+    CategoryModule,
     TicketModule,
     TypeOrmModule.forFeature([
       AddressEntity,
       UserEntity,
       WalletEntity,
       TicketEntity,
+      CategoryEntity,
       ProductEntity,
     ]),
-    CategoryModule,
   ],
 })
 export class AppModule {
