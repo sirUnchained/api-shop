@@ -13,6 +13,7 @@ import { TicketModule } from './ticket/ticket.module';
 import { TicketEntity } from './ticket/entities/ticket.entity';
 import { ProductModule } from './product/product.module';
 import { ProductEntity } from './product/entities/product.entity';
+import { CategoryModule } from './category/category.module';
 
 @Module({
   imports: [
@@ -39,6 +40,7 @@ import { ProductEntity } from './product/entities/product.entity';
       TicketEntity,
       ProductEntity,
     ]),
+    CategoryModule,
   ],
 })
 export class AppModule {
