@@ -1,7 +1,10 @@
+import { CategoryEntity } from 'src/category/entities/category.entity';
 import {
   Column,
   CreateDateColumn,
   Entity,
+  JoinColumn,
+  OneToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
@@ -10,6 +13,10 @@ import {
 export class ProductEntity {
   @PrimaryGeneratedColumn()
   id: number;
+
+  @OneToOne(() => CategoryEntity, (category) => category.id)
+  @JoinColumn()
+  category: CategoryEntity;
 
   @Column()
   title: string;
