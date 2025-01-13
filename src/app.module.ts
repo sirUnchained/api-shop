@@ -16,6 +16,7 @@ import { ProductEntity } from './product/entities/product.entity';
 import { CategoryModule } from './category/category.module';
 import { CategoryEntity } from './category/entities/category.entity';
 import { BasketModule } from './basket/basket.module';
+import { BasketEntity } from './basket/entities/basket.entity';
 
 @Module({
   imports: [
@@ -33,6 +34,7 @@ import { BasketModule } from './basket/basket.module';
         TicketEntity,
         CategoryEntity,
         ProductEntity,
+        BasketEntity,
       ],
       synchronize: true,
     }),
@@ -43,6 +45,7 @@ import { BasketModule } from './basket/basket.module';
     ProductModule,
     CategoryModule,
     TicketModule,
+    BasketModule,
     TypeOrmModule.forFeature([
       AddressEntity,
       UserEntity,
@@ -50,8 +53,8 @@ import { BasketModule } from './basket/basket.module';
       TicketEntity,
       CategoryEntity,
       ProductEntity,
+      BasketEntity,
     ]),
-    BasketModule,
   ],
 })
 export class AppModule {
@@ -66,6 +69,7 @@ export class AppModule {
         { path: 'product', method: RequestMethod.POST },
         { path: 'product', method: RequestMethod.PATCH },
         { path: 'product', method: RequestMethod.DELETE },
+        { path: 'basket', method: RequestMethod.ALL },
       );
     consumer
       .apply(AdminRole)

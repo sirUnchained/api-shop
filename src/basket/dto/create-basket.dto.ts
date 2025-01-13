@@ -9,10 +9,5 @@ export class CreateBasketDto {
   @IsNotEmpty()
   @IsInt()
   @Min(1)
-  user: number;
-
-  @IsNotEmpty()
-  @IsInt()
-  @Min(1)
   product: number;
 }

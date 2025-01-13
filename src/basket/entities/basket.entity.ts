@@ -1,12 +1,6 @@
 import { ProductEntity } from 'src/product/entities/product.entity';
 import { UserEntity } from 'src/users/entities/user.entity';
-import {
-  Column,
-  Entity,
-  OneToMany,
-  PrimaryGeneratedColumn,
-  Unique,
-} from 'typeorm';
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity('basket')
 export class BasketEntity {
