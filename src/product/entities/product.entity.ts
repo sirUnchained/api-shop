@@ -3,8 +3,7 @@ import {
   Column,
   CreateDateColumn,
   Entity,
-  JoinColumn,
-  OneToOne,
+  OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
@@ -14,8 +13,7 @@ export class ProductEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @OneToOne(() => CategoryEntity, (category) => category.id)
-  @JoinColumn()
+  @OneToMany(() => CategoryEntity, (category) => category.id)
   category: CategoryEntity;
 
   @Column()

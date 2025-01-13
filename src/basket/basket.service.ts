@@ -7,7 +7,7 @@ import { CreateBasketDto } from './dto/create-basket.dto';
 import { UpdateBasketDto } from './dto/update-basket.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { BasketEntity } from './entities/basket.entity';
-import { Repository } from 'typeorm';
+import { And, Repository } from 'typeorm';
 import { UserEntity } from 'src/users/entities/user.entity';
 import { ProductEntity } from 'src/product/entities/product.entity';
 
@@ -30,7 +30,10 @@ export class BasketService {
       }
 
       const checkUserProductBasket = await this.basketRepo.findOne({
-        where: { product: checkProduct, user: req.user },
+        where: {
+          user: req.user.id,
+          product: checkProduct.id as any,
+        },
       });
       if (checkUserProductBasket) {
         throw new BadRequestException('product is already in basket.');
@@ -42,6 +45,8 @@ export class BasketService {
         quantity: createBasketDto.quantity,
       });
       await this.basketRepo.save(newItem);
+
+      delete newItem.user.password;
 
       return newItem;
     } catch (error) {
@@ -55,7 +60,11 @@ export class BasketService {
   async findAll(req: any) {
     try {
       const user = req.user;
-      const products = this.basketRepo.find({ where: { user: user } });
+      console.log(user);
+      const products = this.basketRepo.find({
+        where: { user: user },
+        relations: ['product', 'user'],
+      });
       return products;
     } catch (error) {
       if (error instanceof BadRequestException) {

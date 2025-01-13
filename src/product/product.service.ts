@@ -8,25 +8,41 @@ import { UpdateProductDto } from './dto/update-product.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { ProductEntity } from './entities/product.entity';
 import { Repository } from 'typeorm';
+import { CategoryEntity } from 'src/category/entities/category.entity';
 
 @Injectable()
 export class ProductService {
   constructor(
     @InjectRepository(ProductEntity)
     private readonly productRepo: Repository<ProductEntity>,
+    @InjectRepository(CategoryEntity)
+    private readonly categoryRepo: Repository<CategoryEntity>,
   ) {}
+
   async create(createProductDto: CreateProductDto) {
     try {
       const slug: string = createProductDto.title
         .replaceAll(/\s|_/g, '-')
         .toLowerCase();
-      const checkExist = this.productRepo.findOne({ where: { slug } });
+      const checkExist = this.productRepo.findOne({
+        where: { slug, title: createProductDto.title },
+      });
       if (!checkExist) {
-        throw new BadRequestException('product slug already exists.');
+        throw new BadRequestException('product slug and title already exists.');
       }
 
-      const newProduct = this.productRepo.create(createProductDto);
-      await this.productRepo.save(newProduct);
+      const checkCategory = await this.categoryRepo.findOne({
+        where: { id: createProductDto.category },
+      });
+      if (!checkCategory) {
+        throw new BadRequestException('category not found');
+      }
+
+      const newProduct = this.productRepo.create({
+        ...createProductDto,
+        category: checkCategory,
+      });
+      await this.productRepo.save({ ...newProduct, slug });
 
       return newProduct;
     } catch (error) {

@@ -1,6 +1,14 @@
 import { ProductEntity } from 'src/product/entities/product.entity';
 import { UserEntity } from 'src/users/entities/user.entity';
-import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  Entity,
+  JoinColumn,
+  ManyToOne,
+  OneToMany,
+  OneToOne,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 
 @Entity('basket')
 export class BasketEntity {
@@ -10,10 +18,10 @@ export class BasketEntity {
   @Column({ default: 1 })
   quantity: number;
 
-  @OneToMany(() => UserEntity, (user) => user.id, { onDelete: 'CASCADE' })
+  @ManyToOne(() => UserEntity, (user) => user.id, { onDelete: 'CASCADE' })
   user: UserEntity;
 
-  @OneToMany(() => ProductEntity, (product) => product.id, {
+  @ManyToOne(() => ProductEntity, (product) => product.id, {
     onDelete: 'CASCADE',
   })
   product: ProductEntity;

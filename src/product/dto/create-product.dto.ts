@@ -6,9 +6,6 @@ export class CreateProductDto {
   title: string;
 
   @IsNotEmpty()
-  slug: string;
-
-  @IsNotEmpty()
   @MaxLength(250)
   price: string;
 
@@ -19,4 +16,8 @@ export class CreateProductDto {
   @IsNotEmpty()
   @Min(0)
   stock: number;
+
+  @IsNotEmpty()
+  @Min(1)
+  category: number;
 }
