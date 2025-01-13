@@ -15,6 +15,7 @@ import { ProductModule } from './product/product.module';
 import { ProductEntity } from './product/entities/product.entity';
 import { CategoryModule } from './category/category.module';
 import { CategoryEntity } from './category/entities/category.entity';
+import { BasketModule } from './basket/basket.module';
 
 @Module({
   imports: [
@@ -50,6 +51,7 @@ import { CategoryEntity } from './category/entities/category.entity';
       CategoryEntity,
       ProductEntity,
     ]),
+    BasketModule,
   ],
 })
 export class AppModule {
